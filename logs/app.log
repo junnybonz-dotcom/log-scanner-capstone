@@ -1,0 +1,4 @@
+2026-08-16 09:01:00 INFO Server started
+2026-08-16 09:02:15 ERROR Failed to connect to database
+2026-08-16 09:03:40 WARNING Disk usage at 80%
+2026-08-16 09:05:02 ERROR Timeout on request /api/users
