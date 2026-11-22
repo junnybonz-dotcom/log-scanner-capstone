@@ -1,5 +1,7 @@
 # Log Scanner — Python and Bash
 
+[![Log Scanner CI](https://github.com/junnybonz-dotcom/log-scanner-capstone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/junnybonz-dotcom/log-scanner-capstone/actions/workflows/tests.yml)
+
 A beginner-friendly Python command-line tool that recursively inventories files and summarizes matching error lines in `.log` files. It reports file paths, sizes, modification timestamps, and the number of lines matching a chosen text pattern.
 
 ## Skills Demonstrated
@@ -28,31 +30,35 @@ The default search pattern is `ERROR`.
 
 ## How to Run
 
-From the project directory, run:
-
-```bash
-python scanner.py
-```
-
-Scan a particular directory:
+Scan a directory:
 
 ```bash
 python scanner.py logs
 ```
 
-Search for a different pattern:
+Search for a custom pattern:
 
 ```bash
-python scanner.py logs WARNING
+python scanner.py logs --pattern WARNING
 ```
 
-The command-line arguments are:
+Search using regular expressions:
 
-```text
-python scanner.py [directory] [pattern]
+```bash
+python scanner.py logs --pattern "ERROR|WARNING" --regex
 ```
 
-The directory defaults to the current directory, and the pattern defaults to `ERROR`.
+Use case-sensitive matching:
+
+```bash
+python scanner.py logs --pattern ERROR --case-sensitive
+```
+
+Display available arguments:
+
+```bash
+python scanner.py --help
+```
 
 ## Example Output
 
@@ -100,3 +106,15 @@ This describes the project structure observed during development; check the actu
 ## What I Learned
 
 This project helped me practice combining filesystem operations, file metadata, text parsing, command-line arguments, and basic exception handling into a single tool. It also demonstrates how simple log summaries can help identify problems without manually reading every log file.
+
+## Features
+
+- Recursively scans directories and inventories files.
+- Reports file sizes and modification timestamps.
+- Searches `.log` files for matching text.
+- Supports case-insensitive matching by default.
+- Supports regular-expression searches.
+- Allows case-sensitive searching.
+- Displays per-file match counts and a total summary.
+- Handles filesystem errors and invalid directories.
+- Provides a command-line interface using argparse.
