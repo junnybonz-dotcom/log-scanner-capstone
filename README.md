@@ -1,34 +1,33 @@
-# Log Scanner — Python and Bash
+
+# Log Scanner — Python CLI Tool
 
 [![Log Scanner CI](https://github.com/junnybonz-dotcom/log-scanner-capstone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/junnybonz-dotcom/log-scanner-capstone/actions/workflows/tests.yml)
 
-A beginner-friendly Python command-line tool that recursively inventories files and summarizes matching error lines in `.log` files. It reports file paths, sizes, modification timestamps, and the number of lines matching a chosen text pattern.
+A Python command-line tool that recursively inventories files and summarizes matching lines in `.log` files.
 
-## Skills Demonstrated
+It supports text and regular-expression searches, configurable matching behavior, file metadata, and automated tests.
 
-- Python functions, loops, dictionaries, and lists
-- Filesystem traversal with `os.walk()`
-- File metadata with `os.stat()`
-- Log parsing and text matching
-- Command-line arguments with `sys.argv`
-- Basic error handling and exit codes
-- Bash scripting and Linux command-line workflows
+## Features
 
-## How It Works
-
-1. Recursively scans the selected directory and records each file's path, size, and modification time.
-2. Identifies files ending in `.log`.
-3. Searches each log for a selected text pattern.
-4. Prints a summary of the matching lines per log file.
-
-The default search pattern is `ERROR`.
+- Recursively scans directories using pathlib.
+- Records file paths, sizes, and modification timestamps.
+- Finds `.log` files.
+- Searches for custom text patterns.
+- Supports regular-expression searches.
+- Uses case-insensitive matching by default.
+- Supports case-sensitive searches.
+- Displays human-readable file sizes.
+- Reports per-file matches and total matches.
+- Handles invalid directories and filesystem errors.
 
 ## Requirements
 
-- Python 3
-- No third-party Python packages are required; the script uses Python's standard library.
+- Python 3.12 or newer
+- No third-party packages required.
 
-## How to Run
+The application uses Python's standard library.
+
+## Usage
 
 Scan a directory:
 
@@ -60,61 +59,75 @@ Display available arguments:
 python scanner.py --help
 ```
 
-## Example Output
+## How It Works
 
-Captured from a real run of `python scanner.py logs ERROR` on Windows:
+1. Validates the selected directory.
+2. Recursively discovers files.
+3. Records file metadata.
+4. Identifies `.log` files.
+5. Searches each log for the requested pattern.
+6. Summarizes matches per file and across the directory.
 
-```text
-Found 2 files in logs:
-  logs\app.log — 200 bytes — modified 2026-08-16 21:55
-  logs\system.log — 83 bytes — modified 2026-08-16 22:01
+## Automated Tests
 
-'ERROR' summary:
-  logs\app.log: 2 'ERROR' line(s)
-  logs\system.log: 1 'ERROR' line(s)
+Run the test suite:
+
+```bash
+python -m unittest discover -s tests -v
 ```
 
-This run found three matching lines across the two log files.
+The suite contains 14 tests covering:
 
-## Error Handling
+- Recursive file discovery
+- File metadata
+- Case-insensitive matching
+- Case-sensitive matching
+- Regular-expression searches
+- Missing files
+- Per-file match summaries
+- Human-readable file sizes
+- CLI arguments
+- Invalid directory handling
 
-- Checks whether the target directory exists before scanning.
-- Exits with status code `1` if the target directory is invalid.
-- Skips files that raise `PermissionError` or `FileNotFoundError` during metadata inspection.
-- Returns an empty list of matches when a requested log file does not exist.
+Tests use temporary directories and sample log files. They do not modify the repository's original sample logs.
 
-## Current Limitations
+## Continuous Integration
 
-- Pattern matching is case-sensitive and uses substring matching, not regular expressions.
-- Only files ending in `.log` are included in the error summary.
-- The tool counts matching lines; it does not classify error severity or automatically repair problems.
+GitHub Actions runs the test suite on:
+
+- Python 3.12
+- Python 3.13
+- Python 3.14
+
+The workflow also checks Python syntax.
 
 ## Project Structure
 
 ```text
-log_scanner-08-16-2026/
-├── scanner.py
-├── script.sh
+log-scanner-capstone/
+├── .github/
+│   └── workflows/
+│       └── tests.yml
 ├── logs/
-├── journal/
+│   ├── app.log
+│   └── system.log
+├── tests/
+│   ├── test_scanner.py
+│   └── test_cli.py
 ├── .gitignore
-└── README.md
+├── README.md
+└── scanner.py
 ```
 
-This describes the project structure observed during development; check the actual folder contents if the files change.
+## Limitations
+
+- Scans local directories rather than remote systems.
+- Searches text-based `.log` files.
+- Reports matching lines but does not diagnose or repair the underlying issue.
+- Does not continuously monitor new log entries.
 
 ## What I Learned
 
-This project helped me practice combining filesystem operations, file metadata, text parsing, command-line arguments, and basic exception handling into a single tool. It also demonstrates how simple log summaries can help identify problems without manually reading every log file.
+This project helped me combine filesystem traversal, file metadata, text processing, regular expressions, command-line arguments, and exception handling into a reusable Python tool.
 
-## Features
-
-- Recursively scans directories and inventories files.
-- Reports file sizes and modification timestamps.
-- Searches `.log` files for matching text.
-- Supports case-insensitive matching by default.
-- Supports regular-expression searches.
-- Allows case-sensitive searching.
-- Displays per-file match counts and a total summary.
-- Handles filesystem errors and invalid directories.
-- Provides a command-line interface using argparse.
+It also introduced automated testing and continuous integration, making the application easier to validate across multiple Python versions.
